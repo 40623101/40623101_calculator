@@ -38,6 +38,7 @@ class Dialog(QDialog, Ui_Dialog):
         self.pendingAdditiveOperator = ''
         self.sumSoFar = 0.0
         self.pointButton.clicked.connect(self.pointClicked)
+        self.backspaceButton.clicked.connect(self.backspaceClicked)
         
         self.wait = True
         
@@ -136,7 +137,15 @@ class Dialog(QDialog, Ui_Dialog):
         
     def backspaceClicked(self):
         '''回復鍵按下的處理方法'''
-        pass
+        #pass
+        if self.wait:
+            return
+        text = self.display.text()[:-1]
+        if not text:
+            text = '0'
+            self.wait = True
+            
+        self.display.setText(text)   
         
     def clear(self):
         '''清除鍵按下後的處理方法'''
