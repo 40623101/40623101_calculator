@@ -37,6 +37,8 @@ class Dialog(QDialog, Ui_Dialog):
         self.equalButton.clicked.connect(self.equalClicked)
         self.pendingAdditiveOperator = ''
         self.sumSoFar = 0.0
+        self.pointButton.clicked.connect(self.pointClicked)
+        
         self.wait = True
         
         #self.temp = 0
@@ -119,7 +121,14 @@ class Dialog(QDialog, Ui_Dialog):
         
     def pointClicked(self):
         '''小數點按下後的處理方法'''
-        pass
+        #pass
+        if self.wait:
+            self.display.setText('0')
+ 
+        if "." not in self.display.text():
+            self.display.setText(self.display.text() + ".")
+ 
+        self.wait = False
         
     def changeSignClicked(self):
         '''變號鍵按下後的處理方法'''
@@ -136,7 +145,10 @@ class Dialog(QDialog, Ui_Dialog):
     def clearAll(self):
         '''全部清除鍵按下後的處理方法'''
         #pass
-        self.display.clear()
+        self.sumSoFar = 0.0
+        self.pendingAdditiveOperator = ''
+        self.display.setText('0')
+        self.wait = True
         
     def clearMemory(self):
         '''清除記憶體鍵按下後的處理方法'''
