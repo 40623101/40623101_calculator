@@ -44,6 +44,11 @@ class Dialog(QDialog, Ui_Dialog):
         self.factorSoFar = 0.0
         self.pendingAdditiveOperator = ''
         self.pendingMultiplicativeOperator = ''
+        self.clearMemoryButton.clicked.connect(self.clearMemory)
+        self.readMemoryButton.clicked.connect(self.readMemory)
+        self.setMemoryButton.clicked.connect(self.setMemory)
+        self.sumInMemory = 0.0
+        self.addToMemoryButton.clicked.connect(self.addToMemory)
         self.wait = True
         
         #self.temp = 0
@@ -77,6 +82,16 @@ class Dialog(QDialog, Ui_Dialog):
         clickedButton = self.sender()
         clickedOperator = clickedButton.text()
         operand = float(self.display.text())
+        if self.pendingMultiplicativeOperator:
+            if not self.calculate(operand, self.pendingMultiplicativeOperator):
+                self.abortOperation()
+                return
+ 
+            self.display.setText(str(self.factorSoFar))
+            operand = self.factorSoFar
+            self.factorSoFar = 0.0
+            self.pendingMultiplicativeOperator = ''
+            
         if self.pendingAdditiveOperator:
             if not self.calculate(operand, self.pendingAdditiveOperator):
                 self.abortOperation()
@@ -88,15 +103,6 @@ class Dialog(QDialog, Ui_Dialog):
             
         self.pendingAdditiveOperator = clickedOperator
         
-        if self.pendingMultiplicativeOperator:
-            if not self.calculate(operand, self.pendingMultiplicativeOperator):
-                self.abortOperation()
-                return
- 
-            self.display.setText(str(self.factorSoFar))
-            operand = self.factorSoFar
-            self.factorSoFar = 0.0
-            self.pendingMultiplicativeOperator = ''
         self.wait = True
     
         #self.display.clear()
@@ -206,19 +212,27 @@ class Dialog(QDialog, Ui_Dialog):
         
     def clearMemory(self):
         '''清除記憶體鍵按下後的處理方法'''
-        pass
+        #pass
+        self.sumInMemory = 0.0
         
     def readMemory(self):
         '''讀取記憶體鍵按下後的處理方法'''
-        pass
+        #pass
+        self.display.setText(str(self.sumInMemory))
+        self.wait = True
         
     def setMemory(self):
         '''設定記憶體鍵按下後的處理方法'''
-        pass
+        #pass
+        self.equalClicked()
+        self.sumInMemory = float(self.display.text())
         
     def addToMemory(self):
         '''放到記憶體鍵按下後的處理方法'''
-        pass
+        #pass
+        self.equalClicked()
+        self.sumInMemory += float(self.display.text())
+ 
         
     def createButton(self):
         ''' 建立按鍵處理方法, 以 Qt Designer 建立對話框時, 不需要此方法'''
