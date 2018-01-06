@@ -4,10 +4,11 @@
 Module implementing Dialog.
 """
 
-from PyQt5.QtCore import pyqtSlot
+#from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog
 
 from .Ui_Dialog import Ui_Dialog
+import math
 
 
 class Dialog(QDialog, Ui_Dialog):
@@ -44,11 +45,16 @@ class Dialog(QDialog, Ui_Dialog):
         self.factorSoFar = 0.0
         self.pendingAdditiveOperator = ''
         self.pendingMultiplicativeOperator = ''
+        unaryOperator = [self.squareRootButton, self.powerButton,  self.reciprocalButton ]
+        for i in unaryOperator:
+            i.clicked.connect(self.unaryOperatorClicked)
         self.clearMemoryButton.clicked.connect(self.clearMemory)
         self.readMemoryButton.clicked.connect(self.readMemory)
         self.setMemoryButton.clicked.connect(self.setMemory)
         self.sumInMemory = 0.0
         self.addToMemoryButton.clicked.connect(self.addToMemory)
+        self.clearButton.clicked.connect(self.clear)
+        self.changeSignButton.clicked.connect(self.changeSignClicked)
         self.wait = True
         
         #self.temp = 0
@@ -74,7 +80,28 @@ class Dialog(QDialog, Ui_Dialog):
         
     def unaryOperatorClicked(self):
         '''單一運算元按下後處理方法'''
-        pass
+        #pass
+        clickedButton = self.sender()
+        clickedOperator = clickedButton.text()
+        operand = float(self.display.text())
+ 
+        if clickedOperator == "Sqrt":
+            if operand < 0.0:
+                self.abortOperation()
+                return
+ 
+            result = math.sqrt(operand)
+        elif clickedOperator == "X^2":
+            result = math.pow(operand, 2.0)
+        elif clickedOperator == "1/x":
+            if operand == 0.0:
+                self.abortOperation()
+                return
+ 
+            result = 1.0 / operand
+ 
+        self.display.setText(str(result))
+        self.wait = True
         
     def additiveOperatorClicked(self):
         '''加或減按下後進行的處理方法'''
@@ -219,20 +246,20 @@ class Dialog(QDialog, Ui_Dialog):
     def readMemory(self):
         '''讀取記憶體鍵按下後的處理方法'''
         #pass
-        #self.display.setText(str(self.sumInMemory))
-        #self.wait = True
+        self.display.setText(str(self.sumInMemory))
+        self.wait = True
         
     def setMemory(self):
         '''設定記憶體鍵按下後的處理方法'''
         #pass
-        #self.equalClicked()
-        #self.sumInMemory = float(self.display.text())
+        self.equalClicked()
+        self.sumInMemory = float(self.display.text())
         
     def addToMemory(self):
         '''放到記憶體鍵按下後的處理方法'''
         #pass
-        #self.equalClicked()
-        #self.sumInMemory += float(self.display.text())
+        self.equalClicked()
+        self.sumInMemory += float(self.display.text())
  
         
     def createButton(self):
