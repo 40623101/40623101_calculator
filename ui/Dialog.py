@@ -55,6 +55,7 @@ class Dialog(QDialog, Ui_Dialog):
         self.addToMemoryButton.clicked.connect(self.addToMemory)
         self.clearButton.clicked.connect(self.clear)
         self.changeSignButton.clicked.connect(self.changeSignClicked)
+        
         self.wait = True
         
         #self.temp = 0
@@ -212,7 +213,16 @@ class Dialog(QDialog, Ui_Dialog):
         
     def changeSignClicked(self):
         '''變號鍵按下後的處理方法'''
-        pass
+        #pass
+        text = self.display.text()
+        value = float(text)
+ 
+        if value > 0.0:
+            text = "-" + text
+        elif value < 0.0:
+            text = text[1:]
+            
+        self.display.setText(text)
         
     def backspaceClicked(self):
         '''回復鍵按下的處理方法'''
@@ -228,13 +238,20 @@ class Dialog(QDialog, Ui_Dialog):
         
     def clear(self):
         '''清除鍵按下後的處理方法'''
-        pass
+        #pass
+        if self.wait:
+            return
+ 
+        self.display.setText('0')
+        self.wait = True
         
     def clearAll(self):
         '''全部清除鍵按下後的處理方法'''
         #pass
         self.sumSoFar = 0.0
+        self.factorSoFar = 0.0
         self.pendingAdditiveOperator = ''
+        self.pendingMultiplicativeOperator = ''
         self.display.setText('0')
         self.wait = True
         
@@ -268,7 +285,9 @@ class Dialog(QDialog, Ui_Dialog):
         
     def abortOperation(self):
         '''中斷運算'''
-        pass
+        #pass
+        self.clearAll()
+        self.display.setText("####")
         
     #def calculate(self):
         '''計算'''
