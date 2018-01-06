@@ -129,25 +129,26 @@ class Dialog(QDialog, Ui_Dialog):
         '''等號按下後的處理方法'''
         #pass
         operand = float(self.display.text())
+        
         if self.pendingMultiplicativeOperator:
             if not self.calculate(operand, self.pendingMultiplicativeOperator):
                 self.abortOperation()
                 return
-        operand = self.factorSoFar
-        self.factorSoFar = 0.0
-        self.pendingMultiplicativeOperator = ''
+            operand = self.factorSoFar
+            self.factorSoFar = 0.0
+            self.pendingMultiplicativeOperator = ''
         
         if self.pendingAdditiveOperator:
             if not self.calculate(operand, self.pendingAdditiveOperator):
                 self.abortOperation()
                 return
- 
             self.pendingAdditiveOperator = ''
         else:
             self.sumSoFar = operand
  
         self.display.setText(str(self.sumSoFar))
         self.sumSoFar = 0.0
+        
         self.wait = True
         
         
@@ -218,20 +219,20 @@ class Dialog(QDialog, Ui_Dialog):
     def readMemory(self):
         '''讀取記憶體鍵按下後的處理方法'''
         #pass
-        self.display.setText(str(self.sumInMemory))
-        self.wait = True
+        #self.display.setText(str(self.sumInMemory))
+        #self.wait = True
         
     def setMemory(self):
         '''設定記憶體鍵按下後的處理方法'''
         #pass
-        self.equalClicked()
-        self.sumInMemory = float(self.display.text())
+        #self.equalClicked()
+        #self.sumInMemory = float(self.display.text())
         
     def addToMemory(self):
         '''放到記憶體鍵按下後的處理方法'''
         #pass
-        self.equalClicked()
-        self.sumInMemory += float(self.display.text())
+        #self.equalClicked()
+        #self.sumInMemory += float(self.display.text())
  
         
     def createButton(self):
